@@ -33,9 +33,7 @@ def estimate_pass_at_k(
         assert len(num_samples) == len(num_correct)
         num_samples_it = iter(num_samples)
 
-    return np.array(
-        [estimator(int(n), int(c), k) for n, c in zip(num_samples_it, num_correct)]
-    )
+    return np.array([estimator(int(n), int(c), k) for n, c in zip(num_samples_it, num_correct)])
 
 
 def evaluate_functional_correctness(
@@ -88,11 +86,7 @@ def evaluate_functional_correctness(
     correct = np.array(correct)
 
     ks = k
-    pass_at_k = {
-        f"pass@{k}": estimate_pass_at_k(total, correct, k).mean()
-        for k in ks
-        if (total >= k).all()
-    }
+    pass_at_k = {f"pass@{k}": estimate_pass_at_k(total, correct, k).mean() for k in ks if (total >= k).all()}
 
     # Finally, save the results in one file:
     def combine_results():
@@ -103,7 +97,7 @@ def evaluate_functional_correctness(
             sample["passed"] = result[1]["passed"]
             yield sample
 
-    out_file = sample_file + "_results.jsonl"
+    out_file = sample_file.replace(".jsonl", "_results.jsonl")
     print(f"Writing results to {out_file}...")
     write_jsonl(out_file, tqdm.tqdm(combine_results(), total=n_samples))
 
